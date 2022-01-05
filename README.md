@@ -1,2 +1,1 @@
-# DropwizardDemo
-### The microservice is built using the Dropwizard framework. The build contains simple RESTful APIs to connect with a MySQL database and perform simple CRUD operations.
+### This is a generic REST API which can be used to create any form of entity with a schema. On creation this schema can be further used to create, store and retrieve information in the form of objects conforming to the schema. 
