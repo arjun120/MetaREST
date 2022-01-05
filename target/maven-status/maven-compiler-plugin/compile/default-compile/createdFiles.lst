@@ -1,0 +1,12 @@
+com/arjun/metarest/resource/EntityResource.class
+com/arjun/metarest/domain/EntityMetaData.class
+com/arjun/metarest/MetaRESTConfiguration.class
+com/arjun/metarest/domain/Entity.class
+com/arjun/metarest/dao/EntityDao.class
+com/arjun/metarest/domain/User.class
+com/arjun/metarest/mapper/EntityMapper.class
+com/arjun/metarest/service/EntityService.class
+com/arjun/metarest/MetaRESTApplication.class
+com/arjun/metarest/resource/MetaRESTHealthCheckResource.class
+com/arjun/metarest/Authorization/DAuthorizer.class
+com/arjun/metarest/Authentication/DAuthenticator.class
