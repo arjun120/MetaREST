@@ -1,8 +1,10 @@
 package com.arjun.metarest.resource;
 
+import com.arjun.metarest.dao.UserDAO;
 import com.arjun.metarest.domain.Entity;
 import com.arjun.metarest.domain.EntityMetaData;
 import com.arjun.metarest.domain.User;
+import com.arjun.metarest.domain.UserDetails;
 import com.arjun.metarest.service.EntityService;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -32,10 +34,19 @@ import java.util.Map;
 public class EntityResource {
 
     private final EntityService entityService;
+    private final UserDAO userdao;
 
-    public EntityResource(EntityService entityService) {
+    public EntityResource(EntityService entityService, UserDAO userdao) {
         this.entityService = entityService;
+        this.userdao = userdao;
     }
+
+    @POST
+    @Path("/signup")
+    public UserDetails signUp(@Valid UserDetails userDetails) {
+        userdao.insertUser(userDetails);
+        return userDetails;
+}
 
     @PermitAll
     @GET
@@ -47,8 +58,6 @@ public class EntityResource {
         if(entities.isEmpty())
             return Response.ok(entities).build();
         for (int i = 0; i < entities.size(); i++) {
-
-            System.out.println(entities.get(i));
             EntityMetaData entityMetaData = new EntityMetaData(entities.get(i).getId(), entities.get(i).getName(), entities.get(i).getDataSchema());
             responselist.add(entityMetaData);
         }

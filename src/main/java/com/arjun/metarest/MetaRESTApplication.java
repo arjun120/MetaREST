@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 
 import com.arjun.metarest.Authentication.DAuthenticator;
-import com.arjun.metarest.Authorization.DAuthorizer;
+import com.arjun.metarest.dao.UserDAO;
 import com.arjun.metarest.domain.User;
 import com.arjun.metarest.resource.MetaRESTHealthCheckResource;
 import com.arjun.metarest.resource.EntityResource;
@@ -43,17 +43,16 @@ public class MetaRESTApplication extends Application<MetaRESTConfiguration> {
         final DataSource dataSource =
                 config.getDataSourceFactory().build(env.metrics(), SQL);
         DBI dbi = new DBI(dataSource);
-
+        final UserDAO userdao = dbi.onDemand(UserDAO.class);
         // Register Health Check
         MetaRESTHealthCheckResource healthCheck =
                 new MetaRESTHealthCheckResource(dbi.onDemand(EntityService.class));
         env.healthChecks().register(DROPWIZARD_MYSQL_SERVICE, healthCheck);
 	    logger.info("Registering RESTful API resources");
-        env.jersey().register(new EntityResource(dbi.onDemand(EntityService.class)));
+        env.jersey().register(new EntityResource(dbi.onDemand(EntityService.class), userdao));
 
         env.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
-                                .setAuthenticator(new DAuthenticator())
-                                .setAuthorizer(new DAuthorizer())
+                                .setAuthenticator(new DAuthenticator(userdao))
                                 .setRealm("BASIC-AUTH-REALM")
                                 .buildAuthFilter()));
         env.jersey().register(RolesAllowedDynamicFeature.class);
